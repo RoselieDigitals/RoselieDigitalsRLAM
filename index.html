@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roselie Digitals</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- ── Cover / Splash ──────────────────────────── -->
+      <div id="coverPage">
+        <img
+          id="startupImg"
+          src="https://i.imgur.com/t3fFbgv.png"
+          alt="Startup Cover"
+        />
+        <button id="startBtn">START</button>
+      </div>
+
+      <!-- ── Auth Panel (Sign-up & Login) ─────────────── -->
+      <div id="authPanel" class="hidden">
+        <form id="signUpForm">
+          <h2>Sign Up</h2>
+          <input type="text" id="fullName" placeholder="Full Name" required />
+          <input
+            type="email"
+            id="signUpEmail"
+            placeholder="Email"
+            required
+            autocomplete="username"
+          />
+          <input
+            type="password"
+            id="signUpPassword"
+            placeholder="Password"
+            required
+            autocomplete="new-password"
+          />
+          <input type="text" id="contactNumber" placeholder="Contact Number" />
+          <input type="text" id="country" placeholder="Country" />
+          <button type="submit">Sign Up</button>
+          <p><a href="#" id="toLogin">Already have an account? Log In</a></p>
+        </form>
+
+        <form id="loginForm" class="hidden">
+          <h2>Login</h2>
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email"
+            required
+            autocomplete="username"
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+            autocomplete="current-password"
+          />
+          <label
+            ><input type="checkbox" id="showPassword" /> Show Password</label
+          >
+          <button type="submit">Login</button>
+          <p id="loginError" class="error"></p>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="core-enhancements.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
