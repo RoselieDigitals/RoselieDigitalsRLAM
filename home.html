@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Roselie Digitals</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- ⏩ Sidebar -->
+      <div id="sideMenu">
+        <!-- <div class="menuItem">👀 If you see this, the sidebar works!</div> -->
+        <div id="sidebarDashboard" class="menuItem">📊 Dashboard</div>
+        <div id="sidebarCreateLesson" class="menuItem creator-only">
+          ➕ Create New Lesson
+        </div>
+        <div id="sidebarInsight" class="menuItem creator-only">
+          📊 Customer Insight
+        </div>
+        <div id="sidebarAdmin" class="menuItem creator-only">🛠 Admin Tools</div>
+      </div>
+
+      <!-- 🧠 Main Area -->
+      <div class="main-area">
+        <button id="hamburgerBtn">☰</button>
+
+        <!-- 🔝 Top Navigation -->
+        <div id="topNav">
+          <div class="navTab" id="topTabHome">HOME</div>
+          <div class="navTab" id="topTabServices">SERVICES OFFERED</div>
+        </div>
+
+        <!-- 📌 Main Content -->
+        <div id="mainContent" class="home-content">
+          <p>🔄 Loading your dashboard...</p>
+        </div>
+
+        <!-- 🔙 Back Button -->
+        <button id="backBtn" style="display: none">← Back</button>
+
+        <!-- ⬇️ Bottom Navigation -->
+        <nav id="bottomNav">
+          <button id="bottomNavHome">🏠</button>
+          <div style="position: relative">
+            <button id="bottomNavNotif">🔔</button>
+            <span id="notifBadge">0</span>
+          </div>
+          <button id="bottomNavProfile">👤</button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 🔌 Firebase Init First -->
+    <script type="module" src="firebase-init.js"></script>
+
+    <!-- ✅ Rehydration & Auth Check -->
+    <script type="module">
+      import {
+        getApps,
+        getApp,
+        initializeApp,
+      } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+      const storedAppName = sessionStorage.getItem("activeFirebaseAppName");
+      const configFromStorage = sessionStorage.getItem("activeFirebaseConfig");
+
+      let appToUse = null;
+
+      if (storedAppName) {
+        appToUse = getApps().find((a) => a.name === storedAppName);
+      }
+
+      if (!appToUse && configFromStorage) {
+        try {
+          const config = JSON.parse(configFromStorage);
+          appToUse = initializeApp(config, storedAppName || "buyerApp");
+        } catch (e) {
+          console.warn("⚠️ Failed to restore app config:", e.message);
+        }
+      }
+
+      if (!appToUse) {
+        appToUse = getApps()[0] || getApp();
+      }
+
+      const authCheck = getAuth(appToUse);
+      window.sessionApp = appToUse;
+
+      onAuthStateChanged(authCheck, (user) => {
+        if (!user) {
+          console.warn("⚠️ Redirecting — no active session detected");
+          window.location.href = "index.html";
+        } else {
+          console.log("🔐 Logged in as:", user.email);
+          window.currentUserId = user.uid; // ✅ Injected for home.js to detect
+        }
+      });
+    </script>
+
+    <!-- 🧠 App Logic -->
+    <script type="module" src="core-enhancements.js"></script>
+    <script type="module" src="home.js" defer></script>
+  </body>
+</html>
